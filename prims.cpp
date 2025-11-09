@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
-
+#include <utility>
 using namespace std;
 
 // Edge structure: (from, to, weight)
@@ -22,8 +22,8 @@ void primMST(int n, const vector<Edge> &edges)
         adj[e.v].push_back({e.u, e.w});
     }
 
-    vector<int> key(n, INF);      // Minimum weight to connect
-    vector<bool> inMST(n, false); // Included in MST
+    vector<int> key(n, INF);  // Minimum weight to connect
+    vector<char> inMST(n, 0); // use char instead of vector<bool>
     vector<int> parent(n, -1);
 
     priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
@@ -38,10 +38,12 @@ void primMST(int n, const vector<Edge> &edges)
 
         if (inMST[u])
             continue;
-        inMST[u] = true;
+        inMST[u] = 1;
 
-        for (auto &[v, w] : adj[u])
+        for (const auto &edge : adj[u])
         {
+            int v = edge.first;
+            int w = edge.second;
             if (!inMST[v] && w < key[v])
             {
                 key[v] = w;
@@ -52,8 +54,14 @@ void primMST(int n, const vector<Edge> &edges)
     }
 
     cout << "Edge \tWeight\n";
+    int totalWeight = 0;
     for (int i = 1; i < n; ++i)
-        cout << parent[i] << " - " << i << "\t" << key[i] << endl;
+    {
+        cout << parent[i] << " - " << i << "\t" << key[i] << '\n';
+        totalWeight += key[i];
+    }
+
+    cout << "Total Weight of MST = " << totalWeight << '\n';
 }
 
 int main()
@@ -69,6 +77,5 @@ int main()
         {3, 4, 9}};
 
     primMST(n, edges);
-
     return 0;
 }
