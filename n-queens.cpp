@@ -49,7 +49,7 @@ bool solveNQueens(vector<vector<int>> &board, int col)
         if (isSafe(board, i, col))
         {
             board[i][col] = 1;
-            res = solveNQueens(board, col + 1);
+            res = solveNQueens(board, col + 1) || res;
             board[i][col] = 0; // Backtrack
         }
     }
