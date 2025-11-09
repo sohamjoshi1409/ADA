@@ -17,10 +17,7 @@ int knapsack(const vector<int> &weights, const vector<int> &values, int W, vecto
             dp[i][w] = dp[i - 1][w];
             if (weights[i - 1] <= w)
             {
-                if (dp[i][w] < dp[i - 1][w - weights[i - 1]] + values[i - 1])
-                {
-                    dp[i][w] = dp[i - 1][w - weights[i - 1]] + values[i - 1];
-                }
+                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1]);
             }
         }
     }
@@ -41,16 +38,18 @@ int knapsack(const vector<int> &weights, const vector<int> &values, int W, vecto
 
 int main()
 {
-    vector<int> values = {2, 3, 1, 4};
     vector<int> weights = {3, 4, 6, 5};
+    vector<int> values = {2, 3, 1, 4};
     int W = 8;
     vector<int> selected;
 
     int maxValue = knapsack(weights, values, W, selected);
     cout << "Maximum value in Knapsack: " << maxValue << endl;
-    cout << "Selected item indices: ";
+    cout << "Selected items (weight, value): ";
     for (int idx : selected)
-        cout << idx << " ";
+    {
+        cout << "(" << weights[idx] << ", " << values[idx] << ") ";
+    }
     cout << endl;
     return 0;
 }
